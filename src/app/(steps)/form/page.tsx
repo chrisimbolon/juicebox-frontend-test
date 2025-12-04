@@ -1,149 +1,124 @@
 // src/app/(steps)/form/page.tsx
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useRouter } from "next/navigation";
-import Header from "@/components/Header";
 import TextInput from "@/components/form/TextInput";
 import CTAButton from "@/components/CTAButton";
-import { useUser } from "@/context/UserContext";
-
-type FormData = {
-  firstName: string;
-  email: string;
-};
+import Header from "@/components/Header";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext"; 
 
 export default function FormPage() {
-  const { userData, setUserData } = useUser();
-  const [step, setStep] = useState<number>(1);
-  const [formData, setFormData] = useState<FormData>({ firstName: userData.firstName || "", email: userData.email || "" });
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({ firstName: "", email: "" });
   const [errors, setErrors] = useState<{ firstName?: string; email?: string }>({});
-  const containerRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+
   const router = useRouter();
-  const totalSteps = 2;
+  const formRef = useRef<HTMLFormElement>(null);
+  const { setUserData } = useUser(); 
 
   useEffect(() => {
     if (formRef.current) {
-      gsap.fromTo(formRef.current, { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" });
+      gsap.fromTo(
+        formRef.current, 
+        { opacity: 0, x: 20 }, 
+        { opacity: 1, x: 0, duration: 0.35 }
+      );
     }
   }, [step]);
 
-  const validateStep = (): boolean => {
-    const newErrors: typeof errors = {};
-    if (step === 1) {
-      if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
-      else if (formData.firstName.trim().length < 2) newErrors.firstName = "First name must be at least 2 characters";
-    }
-    if (step === 2) {
-      if (!formData.email.trim()) newErrors.email = "Email address is required";
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Please enter a valid email address";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleNext = () => {
-    if (!validateStep()) return;
-    if (step < totalSteps) {
-      setStep((s) => s + 1);
+    // Clear previous errors
+    setErrors({});
+
+    // Validate step 1 - First Name
+    if (step === 1) {
+      if (!formData.firstName.trim()) {
+        setErrors({ firstName: "First name is required" });
+        return;
+      }
+      setStep(2); // Move to next step
       return;
     }
-    // finish
-    setUserData(formData);
-    router.push("/results");
-  };
 
-  const handleBack = () => {
-    if (step > 1) {
-      setStep((s) => s - 1);
-      setErrors({});
-    } else {
-      router.back();
-    }
-  };
+    // Validate step 2 - Email
+    if (step === 2) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        setErrors({ email: "Enter a valid email" });
+        return;
+      }
 
-  const handleInputChange = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((p) => ({ ...p, [field]: e.target.value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
+      
+      setUserData({
+        firstName: formData.firstName,
+        email: formData.email,
+      });
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleNext();
+      // Navigate to results
+      router.push("/results");
     }
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-background flex flex-col">
-      <Header onReset={() => router.push("/")} showBack={step > 1} onBack={handleBack} />
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header onReset={() => router.push("/")} showReset={false} showBack={true} onBack={() => {
+        if (step > 1) {
+          setStep(step - 1);
+        } else {
+          router.back();
+        }
+      }} />
 
-      <main className="flex-1 flex flex-col px-5 pb-7">
-        <form ref={formRef} className="flex-1 flex flex-col" onSubmit={(e) => { e.preventDefault(); handleNext(); }}>
-          <div className="flex-1 flex flex-col items-center pt-8">
-            {step === 1 && (
-              <div className="w-full max-w-[350px] space-y-8">
-                <div className="flex justify-center">
-                  <div className="w-3 h-3 rounded-full" style={{ background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)" }} />
-                </div>
+      <form
+        ref={formRef}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleNext();
+        }}
+        className="flex-1 flex flex-col px-5 pb-7"
+      >
+        <div className="flex-1 flex flex-col items-center pt-8">
+          {step === 1 && (
+            <>
+              <h2 className="text-white text-center mb-8 text-lg">
+                Let's start with the basics. Type in your first name.
+              </h2>
+              <TextInput
+                placeholder="First name"
+                value={formData.firstName}
+                onChange={(e) => {
+                  setFormData({ ...formData, firstName: e.target.value });
+                  setErrors({}); // Clear error on change
+                }}
+                error={errors.firstName}
+              />
+            </>
+          )}
 
-                <div className="text-center">
-                  <p className="text-foreground text-[16px] leading-[1.5] tracking-[0.02em]">
-                    Let's start with the basics. Type in your first name.
-                  </p>
-                </div>
+          {step === 2 && (
+            <>
+              <h2 className="text-white text-center mb-8 text-lg">
+                How should we contact you? Type in your email address.
+              </h2>
+              <TextInput
+                placeholder="Email address"
+                type="email"
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                  setErrors({}); // Clear error on change
+                }}
+                error={errors.email}
+              />
+            </>
+          )}
+        </div>
 
-                <TextInput
-                  placeholder="First name"
-                  value={formData.firstName}
-                  onChange={handleInputChange("firstName")}
-                  onKeyDown={handleKeyDown}
-                  error={errors.firstName}
-                  autoFocus
-                  autoComplete="given-name"
-                />
-              </div>
-            )}
-
-            {step === 2 && (
-              <div className="w-full max-w-[350px] space-y-8">
-                <div className="flex justify-center">
-                  <div className="w-3 h-3 rounded-full" style={{ background: "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)" }} />
-                </div>
-
-                <div className="text-center space-y-2">
-                  <p className="text-foreground text-[16px] leading-[1.5] tracking-[0.02em]">
-                    How should we contact you? Type in your email address.
-                  </p>
-                  <p className="text-muted-foreground text-[14px] leading-[1.5] tracking-[0.02em]">
-                    Thanks, {formData.firstName}! Now, it's time to get a reality check.
-                  </p>
-                  <p className="text-muted-foreground text-[14px] leading-[1.5] tracking-[0.02em]">
-                    This will take 2-3 minutes.
-                  </p>
-                </div>
-
-                <TextInput
-                  type="email"
-                  placeholder="Email address"
-                  value={formData.email}
-                  onChange={handleInputChange("email")}
-                  onKeyDown={handleKeyDown}
-                  error={errors.email}
-                  autoFocus
-                  autoComplete="email"
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-center mt-8">
-            <CTAButton type="submit">Continue</CTAButton>
-          </div>
-        </form>
-      </main>
+        <div className="flex justify-center mt-8">
+          <CTAButton type="submit">Continue</CTAButton>
+        </div>
+      </form>
     </div>
   );
 }

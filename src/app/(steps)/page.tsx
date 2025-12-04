@@ -1,3 +1,5 @@
+// src/app/(steps)/page.tsx
+
 "use client";
 
 import { useRef, useEffect } from "react";
