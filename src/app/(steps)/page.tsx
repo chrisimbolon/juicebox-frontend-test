@@ -100,7 +100,7 @@ export default function HomePage() {
           {opinions.map((opinion, index) => (
             <span
               key={index}
-              ref={(el) => (labelsRef.current[index] = el)}
+              ref={(el) => {labelsRef.current[index] = el;}}
               className="absolute text-[12px] leading-[135%] tracking-[0.02em] text-[#FAFAFA] font-body"
               style={opinion.style}
             >
