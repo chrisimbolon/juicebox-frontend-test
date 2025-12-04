@@ -19,12 +19,12 @@ The goal of the project is to build a responsive mobile onboarding experience ba
 | Import & apply custom fonts (Söhne, Bagoss TRIAL) 
 | Lottie JSON animation implemented 
 | Step-based navigation flow for onboarding 
-| Pixel-perfect UI alignment using tokens 
 | Mobile-first layout & responsive structure 
 | Design-token system for scalable UI 
 
 
 ## 📁 Project Structure
+```
 src/
 ├── app/
 │   ├── (steps)/
@@ -50,9 +50,11 @@ src/
     ├── design-tokens.ts             
     └── utils.ts                     
 
-Running the Project
+### Running the Project
+```bash
 npm install
 npm run dev
+```
 
 Open in browser:
 
