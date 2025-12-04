@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import Header from "@/components/Header";
 import CTAButton from "@/components/CTAButton";
-// import aiBlob from "@/public/assets/ai-blob.png";
+
 
 interface HomePageProps {
   onGetStarted: () => void;
@@ -94,8 +94,8 @@ const HomePage = ({ onGetStarted, onReset }: HomePageProps) => {
               <Image
                 src="/assets/ai-blob.png"
                 alt="AI visualization"
-                width={180}
-                height={180}
+                width={274}
+                height={290}
                 className="object-contain"
                 priority
                 />

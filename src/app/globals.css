@@ -5,57 +5,183 @@
   font-family: "Bagoss TRIAL";
   src: url("/fonts/BagossTRIAL-Regular.ttf") format("truetype");
   font-weight: 400;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Söhne";
   src: url("/fonts/Sohne-Regular.otf") format("opentype");
   font-weight: 400;
+  font-display: swap;
 }
 
-/* ---------------- GLOBAL TOKENS ---------------- */
+/* ====================================
+   MOBILE CONTAINER - CONSTRAINS WIDTH
+   ==================================== */
+.mobile-container {
+  max-width: 390px;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  background: var(--background);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Desktop centering background */
+@media (min-width: 391px) {
+  body {
+    background: #000000 !important; /* Black background outside mobile container */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .mobile-container {
+    /* Optional: Add phone-like bezel on desktop */
+    box-shadow: 
+      0 0 0 8px #1a1a1a,
+      0 0 40px rgba(0, 0, 0, 0.8);
+    border-radius: 40px;
+    overflow: hidden;
+    margin-top: 20px; /* Some breathing room from top */
+    margin-bottom: 20px;
+  }
+}
+
+/* Remove phone frame on actual mobile */
+@media (max-width: 390px) {
+  .mobile-container {
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* ---------------- GLOBAL TOKENS (Exact from Figma) ---------------- */
 :root {
-  --background: #0b0c10;
-  --foreground: #ffffff;
-
-  --primary: #bd9cff;
-  --primary-foreground: #0b0c10;
-
-  --accent: #9b7ff7;
-  --muted-foreground: #bfbfbf;
-
-  --radius: 1rem;
-  --font-sans: "Söhne", sans-serif;
-  --font-alt: "Bagoss TRIAL", sans-serif;
-}
-
-/* ---------------- DARK MODE ---------------- */
-.dark {
-  --background: #0b0c10;
-  --foreground: #ffffff;
+  /* Colors - Exact from Figma */
+  --background: #0C0D10;
+  --foreground: #FAFAFA;
+  
+  --primary: #CDAAFF;
+  --primary-foreground: #0C0D10;
+  
+  --accent: #9B7FF7;
+  --muted-foreground: #BFBFBF;
+  
+  /* Glass/Overlay effects */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.2);
+  
+  /* Spacing - From Figma spec */
+  --module-spacing-lr: 20px;
+  --module-spacing-tb-sml: 28px;
+  --spacing-md: 20px;
+  
+  /* Typography */
+  --font-heading: "Bagoss TRIAL", sans-serif;
+  --font-body: "Söhne", sans-serif;
+  
+  /* Border radius - From Figma */
+  --radius-button: 12px;
+  --radius-input: 12px;
+  --radius-card: 16px;
+  --radius-full: 200px;
+  
+  /* Text sizes - From Figma */
+  --text-h2: 34px;
+  --text-body: 18px;
+  --text-caption: 12px;
+  
+  /* Component dimensions */
+  --button-height: 60px;
+  --button-width: 350px;
+  --input-height: 44px;
+  --back-button-size: 46px;
 }
 
 /* ---------------- BASE STYLES ---------------- */
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    background: #000000; /* Black background for desktop view */
+  }
+  
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     color: var(--foreground);
     background: radial-gradient(
       94.55% 94.55% at 50% 5.45%,
       #222737 0%,
       #0C0D10 100%
     );
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
     @apply antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+  
+  button {
+    font-family: var(--font-body);
   }
 }
 
-/* ---------------- UTILITIES ---------------- */
-.jb-text-gradient {
-  background: linear-gradient(90deg, #c0a4ff 0%, #73bff9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* ---------------- TYPOGRAPHY UTILITIES ---------------- */
+.text-h2 {
+  font-family: var(--font-heading);
+  font-size: var(--text-h2);
+  line-height: 120%;
+  letter-spacing: 0.01em;
+  font-weight: 400;
 }
 
+.text-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 135%;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+.text-caption {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: 135%;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* ---------------- GRADIENT TEXT ---------------- */
+.jb-text-gradient {
+  background: linear-gradient(90deg, #C0A4FF 0%, #73BFF9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---------------- GLASS EFFECTS ---------------- */
+.glass-surface {
+  background: var(--glass-bg);
+  backdrop-filter: blur(120px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-input {
+  background: var(--input-bg);
+  backdrop-filter: blur(20px);
+}
+
+/* ---------------- ANIMATIONS ---------------- */
 .fade-in {
   opacity: 0;
   animation: fadeIn 0.6s ease forwards;
@@ -65,4 +191,66 @@
   to {
     opacity: 1;
   }
+}
+
+.slide-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideInUp 0.6s ease forwards;
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------- SCROLLBAR STYLING ---------------- */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* ---------------- MOBILE OPTIMIZATIONS ---------------- */
+@media (max-width: 430px) {
+  :root {
+    --button-width: calc(100vw - 40px);
+  }
+}
+
+/* ---------------- FOCUS STATES ---------------- */
+input:focus,
+button:focus {
+  outline: none;
+}
+
+input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---------------- SELECTION COLORS ---------------- */
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+::-moz-selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+@keyframes slow-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.slow-rotate {
+  animation: slow-rotate 18s linear infinite;
 }

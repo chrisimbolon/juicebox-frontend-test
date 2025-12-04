@@ -1,39 +1,59 @@
+// src/components/CTAButton.tsx
+
 "use client";
 
-import { forwardRef, ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface CTAButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
-  fullWidth?: boolean;
+  children: React.ReactNode;
 }
 
 const CTAButton = forwardRef<HTMLButtonElement, CTAButtonProps>(
-  ({ children, className, variant = "primary", fullWidth = true, ...props }, ref) => {
+  ({ variant = "primary", children, className, ...props }, ref) => {
     return (
       <button
         ref={ref}
         className={cn(
-          "h-[60px] rounded-[16px] font-normal text-base transition-all duration-300",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background",
-          "tracking-[0.02em] leading-[1.35]",
+          // Base styles
+          "relative inline-flex items-center justify-center",
+          "font-body text-body transition-all duration-200",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          
+          // Exact dimensions from Figma
+          "h-[60px] w-full max-w-[350px]",
+          
+          // Border radius from Figma (12px)
+          "rounded-[12px]",
+          
+          // Variant styles
           variant === "primary" && [
-            "bg-primary text-primary-foreground",
-            "hover:opacity-90 hover:scale-[1.01]",
-            "focus:ring-primary",
-            "active:scale-[0.99]",
+            "bg-[#CDAAFF]", // Exact primary color from Figma
+            "text-[#0C0D10]", // Dark text on light button
+            "shadow-[0px_0px_0px_0px_rgba(255,255,255,0.34)]",
+            "hover:bg-[#BF94FF]", // Slightly darker on hover
+            "active:scale-[0.98]",
+            "focus-visible:ring-[#CDAAFF]",
           ],
+          
           variant === "secondary" && [
-            "bg-secondary text-foreground border border-border",
-            "hover:bg-[#FFFFFF1A]",
-            "focus:ring-border",
+            "bg-transparent",
+            "text-[#FAFAFA]",
+            "border border-[#FAFAFA]",
+            "hover:bg-[rgba(255,255,255,0.05)]",
+            "active:scale-[0.98]",
+            "focus-visible:ring-[#FAFAFA]",
           ],
-          fullWidth ? "w-full max-w-[350px] mx-auto" : "px-8",
+          
           className
         )}
         {...props}
       >
-        {children}
+        <span className="font-[400] text-[18px] leading-[135%] tracking-[0.02em]">
+          {children}
+        </span>
       </button>
     );
   }

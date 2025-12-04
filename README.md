@@ -4,7 +4,7 @@ Mobile Onboarding Flow — Frontend Implementation
 This repository contains my implementation for the Juicebox Frontend Developer Code Test.  
 The goal of the project is to build a responsive mobile onboarding experience based on the provided Figma design, Lottie animation assets, and visual specifications.
 
-## 🚀 Tech Stack
+##  Tech Stack
 - **Next.js 14 (App Router, TypeScript)**
 - **TailwindCSS v4**
 - **Shadcn UI components**
@@ -12,7 +12,7 @@ The goal of the project is to build a responsive mobile onboarding experience ba
 - **GSAP micro animations**
 - **CSS custom variables & Design Tokens** for pixel-perfect Figma alignment
 
-## 🎯 Objectives Completed
+## Objectives Completed
 | Requirement 
 |------------|
 | Setup Next.js + TypeScript + Tailwind + Shadcn UI 

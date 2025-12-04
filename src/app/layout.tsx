@@ -35,16 +35,12 @@ export default function RootLayout({
         />
       </head>
 
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground flex justify-center`}
-      >
-        {/* Centered mobile frame */}
-        <div className="w-full max-w-[430px] min-h-screen flex flex-col">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        {/* ✅ Use the mobile-container class from globals.css */}
+        <div className="mobile-container">
           <UserProvider>{children}</UserProvider>
         </div>
       </body>
     </html>
   );
 }
-
-
