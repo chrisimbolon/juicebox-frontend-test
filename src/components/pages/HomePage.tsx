@@ -104,7 +104,7 @@ const HomePage = ({ onGetStarted, onReset }: HomePageProps) => {
             {opinions.map((opinion, index) => (
               <span
                 key={index}
-                ref={(el) => (labelsRef.current[index] = el)}
+                ref={(el) => { labelsRef.current[index] = el;}}
                 className={`absolute text-[12px] leading-[1.35] tracking-[0.02em] text-foreground max-w-[140px] opacity-0
                   ${getPositionStyles(opinion.position)}`}
               >
