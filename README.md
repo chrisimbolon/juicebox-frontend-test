@@ -13,8 +13,8 @@ The goal of the project is to build a responsive mobile onboarding experience ba
 - **CSS custom variables & Design Tokens** for pixel-perfect Figma alignment
 
 ## 🎯 Objectives Completed
-| Requirement | Status |
-|------------|:------:|
+| Requirement 
+|------------|
 | Setup Next.js + TypeScript + Tailwind + Shadcn UI 
 | Import & apply custom fonts (Söhne, Bagoss TRIAL) 
 | Lottie JSON animation implemented 
@@ -49,6 +49,14 @@ src/
 └── lib/
     ├── design-tokens.ts             
     └── utils.ts                     
+```
+
+
+###  Clone the Repository
+```bash
+git clone https://github.com/chrisimbolon/juicebox-frontend-test
+cd juicebox-frontend-test
+```
 
 ### Running the Project
 ```bash
